@@ -3,7 +3,7 @@ import React from 'react';
 
 const Header = ({ course }) => {
     return (
-      <h1>{course.name}</h1>
+      <h2 key={String(course.id)+"1"}>{course.name}</h2>
     )
 }
 

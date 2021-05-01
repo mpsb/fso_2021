@@ -7,7 +7,7 @@ const Content = ({ course }) => {
     return (
       <div>
         {course.parts.map(course =>
-          <Part key={course.id} part={course}/>)}
+          <Part key={String(course.id)+"2"} part={course}/>)}
       </div>
     )
 }

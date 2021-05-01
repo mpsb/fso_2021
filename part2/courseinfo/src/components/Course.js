@@ -4,14 +4,17 @@ import Content from './Content';
 import Total from './Total';
 
 
-const Course = ({course}) => {
+const Course = ({courses}) => {
+    console.log(courses);
+
     return(
-        <div>
+        courses.map(course => 
+        <div key={String(course.id)+"1"}>
             <Header course={course} />
             <Content course={course} />
             <Total course={course} />
-        </div>
-    )
+        </div>)
+    );
 }
 
 export default Course;
