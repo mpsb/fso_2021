@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 import axios from 'axios';
 import addContact from './services/addContact';
 import deleteContact from './services/deleteContact';
 import updateContact from './services/updateContact';
+import './App.css';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -14,6 +16,8 @@ const App = () => {
   const [ showAll, setShowAll ] = useState(true)
   const [ nameFilter, setNameFilter ] = useState('')
   const [ changePersons, setChangePersons ] = useState(false);
+  const [ notification, setNotification ] = useState(null);
+  const [ notificationType, setNotificationType ] = useState(null);
 
   const personsToShow = showAll ? persons : persons.filter(person => person.name.toLowerCase().includes(nameFilter));
 
@@ -58,14 +62,14 @@ const App = () => {
 
         console.log(id)
 
-        updateContact(`http://localhost:3001/persons/${id}`, personObject, changePersons, setChangePersons);
+        updateContact(`http://localhost:3001/persons/${id}`, personObject, changePersons, setChangePersons, setNotification, setNotificationType);
       }
       return;
     }
 
     else {
       // post new contact to server
-      addContact('http://localhost:3001/persons', personObject, changePersons, setChangePersons);
+      addContact('http://localhost:3001/persons', personObject, changePersons, setChangePersons, setNotification, setNotificationType);
 
       setPersons(persons.concat(personObject));
       console.log(persons);
@@ -82,7 +86,7 @@ const App = () => {
     if(window.confirm(`Delete ${nameToBeDeleted}?`)) {
       setPersons(persons.slice(event.target.value-1, 1));
       
-      deleteContact(`http://localhost:3001/persons/${event.target.value}`, changePersons, setChangePersons);
+      deleteContact(`http://localhost:3001/persons/${event.target.value}`, changePersons, setChangePersons, setNotification, setNotificationType, nameToBeDeleted);
     }
     else {
       console.log('Canceled delete.');
@@ -104,6 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} type={notificationType} />
       <Filter changeFunction={handleFilterChange}/>
       <h2>Add new entry:</h2>
       <PersonForm onNameChangeFunction={handleNameChange} onNumberChangeFunction={handleNumberChange} onSubmitFunction={AddName}/>
